@@ -1,7 +1,7 @@
 name 'rs_aws_alb'
 type 'plugin'
 rs_ca_ver 20161221
-short_description "Amazon Web Services - Elastic Load Balancer"
+short_description "Amazon Web Services - Applicaton Load Balancer"
 long_description "Version: 1.0"
 package "plugins/rs_aws_alb"
 import "sys_log"

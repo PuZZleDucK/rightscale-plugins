@@ -1,7 +1,7 @@
 name 'EFS Test CAT'
 rs_ca_ver 20161221
-short_description "Amazon Web Services - Elastic File System - Test CAT"
-import "plugins/rs_aws_efs"
+short_description "Amazon Web Services - Application Load Balancer - Test CAT"
+import "plugins/rs_aws_alb"
 
 parameter "lb_name" do
   label "ALB Name"
