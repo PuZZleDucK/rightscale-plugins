@@ -1,3 +1,7 @@
+
+# RightScale EC2 Plugin
+This repo includes a RightScale plugin for EC2. It has been developed as a technical exercise for Agile Talent and is untested and unsuitable for deployment.
+
 # RightScale Plugins
 This repo contains a library of open source RightScale plugins.
 
@@ -56,5 +60,5 @@ Visit http://chat.rightscale.com/ to join!
 Github issues contain a template for three types of requests(Bugs, New Features to an existing Plugin, New Plugin Request)
 
 - Bugs: Any issue you are having with an existing plugin not functioning correctly, this does not include missing features, or actions.
-- New Feature Request: Any feature(Field, Action, Link, Output, etc) that are to be added to an existing plugin. 
-- New Plugin Request: Request for a new plugin based off of a new Resource(i.e Cloud Resource Type(`rds`,`elb`), Third Party Service(`riverbed`,`f5`,`cisco`), etc. 
+- New Feature Request: Any feature(Field, Action, Link, Output, etc) that are to be added to an existing plugin.
+- New Plugin Request: Request for a new plugin based off of a new Resource(i.e Cloud Resource Type(`rds`,`elb`), Third Party Service(`riverbed`,`f5`,`cisco`), etc.
