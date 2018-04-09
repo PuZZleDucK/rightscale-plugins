@@ -149,10 +149,12 @@ plugin "rs_aws_ec2" do
   end
 
   output "imageId" do
+    label "Image Id"
     type "simple_element"
   end
 
   output "requestId" do
+    label "Request Id"
     type "simple_element"
   end
 
