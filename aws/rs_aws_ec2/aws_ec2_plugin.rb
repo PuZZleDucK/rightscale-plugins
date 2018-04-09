@@ -222,7 +222,7 @@ plugin "rs_aws_ec2" do
 end
 
 resource_pool "ec2_pool" do
-  plugin $rs_aws_vpc
+  plugin $rs_aws_ec2
   auth "key", type: "aws" do
     version     4
     service    'ec2'
@@ -262,7 +262,7 @@ define provision_tags(@declaration) return @resource do
     @resource = rs_aws_ec2.tags.create($fields)
     call stop_debugging()
     $ec2 = to_object(@resource)
-    call sys_log.detail(join(["tags:", to_s($vpc)]))
+    call sys_log.detail(join(["tags:", to_s($ec2)]))
   end
 end
 
