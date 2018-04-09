@@ -35,62 +35,40 @@ AWS EC2 resources can now be created by specifying a resource declaration with t
 The resulting resource can be manipulated just like the native RightScale resources in RCL and CAT. See the Examples Section for more examples and complete CAT's.
 ## Supported Resources
  - ec2
- - endpoint
- - ??? route_table
- - ??? nat_gateway
- - ??? addresses
- - ??? tags
+ - tags
 
 ## Usage
 ```
 #Creates an EC2 instance
 resource "my_ec2", type: "rs_aws_ec2.ec2" do
-???  cidr_block "10.0.0.0/16"
-  instance_tenancy "default"
-end
-
-resource "my_ec2_endpoint", type: "rs_aws_ec2.endpoint" do
-???  vpc_id @my_ec2.vpcId
-???  service_name "com.amazonaws.us-east-1.s3"
+  dry_run false
+  no_reboot false
 end
 
 ```
-#
+
 ## Resources
 ## ec2
-#### ??? Supported Fields
-| Field Name | Required? | Description |
-|------------|-----------|-------------|
-|amazon_provided_ipv6_cidr_block|No|Requests an Amazon-provided IPv6 CIDR block with a /56 prefix length for the VPC. You cannot specify the range of IP addresses, or the size of the CIDR block.|
-|cidr_block|Yes|The IPv4 network range for the VPC, in CIDR notation. For example, 10.0.0.0/16.|
-|instance_tenancy|No|The tenancy options for instances launched into the VPC. For default, instances are launched with shared tenancy by default. You can launch instances with any tenancy into a shared tenancy VPC. For dedicated, instances are launched as dedicated tenancy instances by default. You can only launch instances with a tenancy of dedicated or host into a dedicated tenancy VPC.|
-
-## ??? Supported Actions
-| Action | API Implementation | Support Level |
-|--------------|:----:|:-------------:|
-| create | [CreateVpc](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVpc.html) | Supported |
-| destroy | [DeleteVpc](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteVpc.html) | Supported |
-| list,get, show | [DescribeVpcs](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcs.html) | Supported |
-| create_tag | [CreateTags](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html) | Supported |
-| delete_tag | [DeleteTags](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteTags.html) | Untested |
-
-## ??? endpoint
 #### Supported Fields
 | Field Name | Required? | Description |
 |------------|-----------|-------------|
-|vpc_id| Yes | The ID of the VPC in which the endpoint will be used. |
-|service_name| Yes | The AWS service name, in the form com.amazonaws.region.service . |
-|route_table_id_1| No | Route Table to pin to |
-|vpc_interface_type| No | The type of endpoint. Options: Interface/Gateway, Default: Gateway |
-|private_dns_enabled| No| (Interface endpoint) Indicate whether to associate a private hosted zone with the specified VPC. Default: True |
-|security_group_id_1| No | (Interface endpoint) The ID of one or more security groups to associate with the endpoint network interface. |
+|block_device_mapping_1|No|Attach one or more block devices to the ec2 instance.|
+|block_device_mapping_2|No|Attach one or more block devices to the ec2 instance.|
+|block_device_mapping_3|No|Attach one or more block devices to the ec2 instance.|
+|description|No|Provide a description for the ec2 image being created.|
+|dry_run|No|Checks you have the required permissions for the action, without making a request, and provides an error response.|
+|instance_id|Yes|The ID of the instance.|
+|name|Yes|Specify a name for the new image.|
+|no_reboot|No|If set, Amazon EC2 doesn't shut down the instance before creating the image.|
 
-## ??? Supported Actions
+## Supported Actions
 | Action | API Implementation | Support Level |
 |--------------|:----:|:-------------:|
-| create | [CreateVpcEndpoint](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateVpcEndpoint.html) | Supported |
-| destroy | [DeleteVpcEndpoints](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteVpcEndpoints.html) | Supported |
-| list | [DescribeVpcEndpoints](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DescribeVpcEndpoints.html) | Supported |
+| create | [CreateImage](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateImage.html) | Untested |
+| destroy | [DeleteImage](https://docs.aws.amazon.com/appstream2/latest/APIReference/API_DeleteImage.html) | Untested |
+| list, get, show | [DescribeImages](https://docs.aws.amazon.com/appstream2/latest/APIReference/API_DescribeImages.html) | Untested |
+| create_tag | [CreateTags](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html) | Untested |
+| delete_tag | [DeleteTags](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteTags.html) | Untested |
 
 ## tags
 #### Supported Fields
