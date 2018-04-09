@@ -219,6 +219,17 @@ plugin "rs_aws_ec2" do
   end
 end
 
+resource_pool "ec2_pool" do
+  plugin $rs_aws_vpc
+  auth "key", type: "aws" do
+    version     4
+    service    'ec2'
+    region     'us-east-1'
+    access_key cred('AWS_ACCESS_KEY_ID')
+    secret_key cred('AWS_SECRET_ACCESS_KEY')
+  end
+end
+
 define provision_ec2(@declaration) return @ec2 do
   sub on_error: stop_debugging() do
     $object = to_object(@declaration)
