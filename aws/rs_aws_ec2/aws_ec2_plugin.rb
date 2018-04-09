@@ -11,7 +11,7 @@ plugin "rs_aws_ec2" do
     default_host "ec2.amazonaws.com"
     default_scheme "https"
     query do {
-      "Version" => "2016-11-15"
+      "Version" => "2016-11-15" # TODO: check AWS API versioning
     } end
   end
 
@@ -96,6 +96,98 @@ plugin "rs_aws_ec2" do
         alias_for "Tag.1.Key"
         location "query"
       end
+    end
+  end
+
+  type "endpoint" do
+    href_templates "/?Action=DescribeEc2Endpoints&Ec2EndpointId.1={{//CreateEc2EndpointResponse/ec2Endpoint/ec2EndpointId}}","/?Action=DescribeEc2Endpoints&Ec2EndpointId.1={{//DescribeEc2EndpointsResponse/ec2EndpointSet/item/ec2EndpointId}}"
+    provision 'provision_endpoint'
+    delete    'delete_endpoint'
+
+    field "ec2_id" do
+      alias_for "Ec2Id"
+      type      "string"
+      location  "query"
+    end
+
+    field "service_name" do
+      alias_for "ServiceName"
+      type      "string"
+      location  "query"
+    end
+
+    field "route_table_id_1" do
+      alias_for "RouteTableId.1"
+      type      "string"
+      location  "query"
+    end
+
+    field "ec2_endpoint_type" do
+      alias_for "Ec2EndpointType"
+      type "string"
+      location "query"
+    end
+
+    field "private_dns_enabled" do
+      alias_for "PrivateDnsEnabled"
+      type "string"
+      location "query"
+    end
+
+    field "security_group_id_1" do
+      alias_for "SecurityGroupId.1"
+      type "string"
+      location "query"
+    end
+
+    output "ec2EndpointId" do
+      type "simple_element"
+    end
+
+    output "ec2Id" do
+      type "simple_element"
+    end
+
+    output "state" do
+      type "simple_element"
+    end
+
+    output "routeTableIdSet" do
+      type "array"
+    end
+
+    output "creationTimestamp" do
+      type "simple_element"
+    end
+
+    output "policyDocument" do
+      type "simple_element"
+    end
+
+    output "serviceName" do
+      type "simple_element"
+    end
+
+    action "create" do
+      verb "POST"
+      path "/?Action=CreateEc2Endpoint"
+      output_path "//CreateEc2EndpointResponse/ec2Endpoint"
+    end
+
+    action "destroy" do
+      verb "POST"
+      path "/?Action=DeleteEc2Endpoints&Ec2EndpointId.1=$ec2EndpointId"
+    end
+
+    action "get" do
+      verb "POST"
+      output_path "//DescribeEc2EndpointsResponse/ec2EndpointSet/item"
+    end
+
+    action "list" do
+      verb "POST"
+      path "/?Action=DescribeEc2Endpoints"
+      output_path "//DescribeEc2EndpointsResponse/ec2EndpointSet/item"
     end
   end
 
