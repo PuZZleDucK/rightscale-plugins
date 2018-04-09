@@ -72,7 +72,7 @@ plugin "rs_aws_ec2" do
     end
 
     # https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateImage.html
-    action "create" do # TODO: ac2 actions
+    action "create" do
       verb "POST"
       path "/?Action=CreateImage"
       output_path "//CreateImageResponse/ec2"

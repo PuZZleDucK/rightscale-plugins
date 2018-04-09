@@ -9,8 +9,8 @@ output "list_ec2" do
 end
 
 resource "my_ec2", type: "rs_aws_ec2.ec2" do
-  cidr_block "10.0.0.0/16"  # TODO: ec2 resource properties
-  instance_tenancy "default"
+  dry_run false
+  no_reboot false
 end
 
 resource "my_rs_ec2_tag", type: "rs_aws_ec2.tags" do
@@ -26,7 +26,7 @@ operation 'list_ec2' do
   } end
 end
 
-operation "launch" do  # TODO: ???
+operation "launch" do
   definition "generated_launch"
 end
 
@@ -42,11 +42,10 @@ define list_ec2s(@my_ec2) return $object do
   call rs_aws_ec2.stop_debugging()
 end
 
-  # TODO: update ec2 definitions
 define generated_launch(@my_ec2,@my_rs_ec2,@my_rs_ec2_tag) return @my_ec2,@my_rs_ec2,@my_rs_ec2_tag do
   provision(@my_ec2)
   provision(@my_rs_ec2)
-  @ec21 = rs_aws_ec2.ec2.show(ec2Id: @my_rs_ec2.resource_uid) # remove _rs? and ec21?
+  @ec21 = rs_aws_ec2.ec2.show(ImageId: @my_rs_ec2.resource_uid)
   provision(@my_rs_ec2_tag)
   @ec21.create_tag(tag_1_key: "new_key", tag_1_value: "new_value")
 end
