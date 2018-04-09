@@ -17,62 +17,107 @@ plugin "rs_aws_ec2" do
 
   type "ec2" do
     # HREF is set to the correct template in the provision definition due to a lack of usable fields in the response to build the href
-    href_templates "/?Action=DescribeVpcs&Ec2Id.1={{//CreateVpcResponse/vpc/vpcId}}","/?DescribeVpcs&VpcId.1={{//DescribeEc2sResponse/ec2Set/item/ec2Id}}" # TODO: vpc-functions => ec2-functions
+    href_templates "/?Action=DescribeEc2s&Ec2Id.1={{//CreateEc2Response/ec2/ec2Id}}","/?DescribeEc2s&Ec2Id.1={{//DescribeEc2sResponse/ec2Set/item/ec2Id}}"
     provision 'provision_ec2'
     delete    'delete_ec2'
 
-    field "amazon_provided_ipv6_cidr_block" do  # TODO: update ec2 fields
-      alias_for "AmazonProvidedIpv6CidrBlock"
+    field "block_device_mapping_1" do
+      alias_for " BlockDeviceMapping.1"
       type      "string"
       location  "query"
     end
 
-    output "ec2Id" do  # TODO: update ec2 outputs
-      type "simple_element"
+    field "block_device_mapping_2" do
+      alias_for " BlockDeviceMapping.2"
+      type      "string"
+      location  "query"
     end
 
-    output "state" do
-      type "simple_element"
+    field "block_device_mapping_3" do
+      alias_for " BlockDeviceMapping.3"
+      type      "string"
+      location  "query"
     end
 
-    output "tagSet" do
-      type "simple_element"
+    field "block_device_mapping_4" do
+      alias_for " BlockDeviceMapping.4"
+      type      "string"
+      location  "query"
     end
 
-    output "instanceTenancy" do
-      type "simple_element"
+    field "block_device_mapping_5" do
+      alias_for " BlockDeviceMapping.5"
+      type      "string"
+      location  "query"
     end
 
+    field "description" do
+      alias_for "Description"
+      type      "string"
+      location  "query"
+    end
+
+    field "dry_run" do
+      alias_for "DryRun"
+      type      "boolean"
+      location  "query"
+      # DEFAULT: false
+    end
+
+    field "instance_id" do
+      alias_for "InstanceId"
+      type      "string"
+      location  "query"
+    end
+
+    field "name" do
+      alias_for "Name"
+      type      "string"
+      location  "query"
+    end
+
+    field "no_reboot" do
+      alias_for "NoReboot"
+      type      "boolean"
+      location  "query"
+      # DEFAULT: false
+    end
+
+    # https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateImage.html
     action "create" do # TODO: ac2 actions
       verb "POST"
-      path "/?Action=CreateEc2"
-      output_path "//CreateEc2Response/ec2"
+      path "/?Action=CreateImage"
+      output_path "//CreateImageResponse/ec2"
     end
 
+    # https://docs.aws.amazon.com/appstream2/latest/APIReference/API_DeleteImage.html
     action "destroy" do
-      verb "POST"
-      path "/?Action=DeleteEc2&Ec2Id=$ec2Id"
+      verb "DELETE"
+      path "/?Action=DeleteImage&InstanceId=$instanceId"
     end
 
+    # https://docs.aws.amazon.com/appstream2/latest/APIReference/API_DescribeImages.html
     action "get" do
       verb "POST"
-      output_path "//DescribeEc2sResponse/ec2Set/item"
+      output_path "//DescribeImagesResponse/imageSet/item"
     end
 
+    # https://docs.aws.amazon.com/appstream2/latest/APIReference/API_DescribeImages.html
     action "show" do
-      path "/?Action=DescribeEc2s"
+      path "/?Action=DescribeImages"
       verb "POST"
-      output_path "//DescribeEc2sResponse/ec2Set/item"
-      field "ec2Id" do
-        alias_for "Ec2Id.1"
+      output_path "//DescribeImagesResponse/imageSet/item"
+      field "ImageId" do
+        alias_for "ImageId.1"
         location "query"
       end
     end
 
+    # https://docs.aws.amazon.com/appstream2/latest/APIReference/API_DescribeImages.html
     action "list" do
       verb "POST"
-      path "/?Action=DescribeEc2s"
-      output_path "//DescribeEc2sResponse/ec2Set/item"
+      path "/?Action=DescribeImages"
+      output_path "//DescribeImagesResponse/imageSet/item"
     end
 
     action "create_tag" do
@@ -91,15 +136,94 @@ plugin "rs_aws_ec2" do
 
     action "delete_tag" do
       path "/?Action=CreateTags&ResourceId.1=$ec2Id"
-      verb "POST"
+      verb "DELETE"
       field "tag_1_key" do
         alias_for "Tag.1.Key"
         location "query"
       end
     end
+
+  # https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RebootInstances.html
+  action "reboot" do
+    verb "POST"
+    path "/?Action=RebootInstances&InstanceId.1=$InstanceId.1&InstanceId.2=$InstanceId.2"
+    output_path "//RebootCacheClusterResult/CacheCluster"
+
+    field "node_id_1" do
+      alias_for "InstanceId.1"
+      location "query"
+    end
+
+    field "node_id_2" do
+      alias_for "InstanceId.2"
+      location "query"
+    end
   end
 
-  type "endpoint" do
+# TODO: check: ImageSet
+
+    output "ec2Id" do
+      type "simple_element" # TODO: better types
+    end
+
+    output "instanceId" do
+      type "simple_element"
+    end
+
+    output "instanceType" do
+      type "simple_element"
+    end
+
+    output "availabilityZone" do
+      type "simple_element"
+    end
+
+    output "state" do
+      type "simple_element"
+    end
+
+    output "statusCheck" do
+      type "simple_element"
+    end
+
+    output "alarmStatus" do
+      type "simple_element"
+    end
+
+    output "publicDns" do
+      type "simple_element"
+    end
+
+    output "publicIp" do
+      type "simple_element"
+    end
+
+    output "keyName" do
+      type "simple_element"
+    end
+
+    output "monitoring" do
+      type "simple_element"
+    end
+
+    output "launchTime" do
+      type "simple_element"
+    end
+
+    output "securityGroups" do
+      type "simple_element"
+    end
+
+    output "tagSet" do
+      type "simple_element"
+    end
+
+    output "instanceTenancy" do
+      type "simple_element"
+    end
+  end
+
+  type "endpoint" do # TODO: update endpoints
     href_templates "/?Action=DescribeEc2Endpoints&Ec2EndpointId.1={{//CreateEc2EndpointResponse/ec2Endpoint/ec2EndpointId}}","/?Action=DescribeEc2Endpoints&Ec2EndpointId.1={{//DescribeEc2EndpointsResponse/ec2EndpointSet/item/ec2EndpointId}}"
     provision 'provision_endpoint'
     delete    'delete_endpoint'
