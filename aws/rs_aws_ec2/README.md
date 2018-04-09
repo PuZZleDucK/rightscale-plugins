@@ -12,8 +12,8 @@ The AWS EC2 Plugin integrates RightScale Self-Service with the basic functionali
 - The following RightScale Credentials:
   - `AWS_ACCESS_KEY_ID`
   - `AWS_SECRET_ACCESS_KEY`
-- ??? The following packages are also required (See the Installation section for details):
-  - ??? [sys_log](../../libraries/sys_log.rb)
+- The following packages are also required (See the Installation section for details):
+  - [sys_log](../../libraries/sys_log.rb)
 
 ## Installation
 1. Be sure your RightScale account is SelfService enabled
@@ -48,7 +48,7 @@ end
 ```
 
 ## Resources
-## ec2
+### ec2
 #### Supported Fields
 | Field Name | Required? | Description |
 |------------|-----------|-------------|
@@ -61,16 +61,16 @@ end
 |name|Yes|Specify a name for the new image.|
 |no_reboot|No|If set, Amazon EC2 doesn't shut down the instance before creating the image.|
 
-## Supported Actions
+#### Supported Actions
 | Action | API Implementation | Support Level |
 |--------------|:----:|:-------------:|
 | create | [CreateImage](https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateImage.html) | Untested |
 | destroy | [DeleteImage](https://docs.aws.amazon.com/appstream2/latest/APIReference/API_DeleteImage.html) | Untested |
 | list, get, show | [DescribeImages](https://docs.aws.amazon.com/appstream2/latest/APIReference/API_DescribeImages.html) | Untested |
-| create_tag | [CreateTags](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html) | Untested |
-| delete_tag | [DeleteTags](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteTags.html) | Untested |
+| create_tag | [CreateTags](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html) | Supported |
+| delete_tag | [DeleteTags](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DeleteTags.html) | Supported |
 
-## tags
+### tags
 #### Supported Fields
 | Field Name | Required? | Description |
 |------------|-----------|-------------|
@@ -78,7 +78,7 @@ end
 |tag_1_key| Yes | Tag Key |
 |tag_1_value | Yes | Tag Value |
 
-## Supported Actions
+#### Supported Actions
 | Action | API Implementation | Support Level |
 |--------------|:----:|:-------------:|
 | create | [CreateTags](http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_CreateTags.html) | Supported |
