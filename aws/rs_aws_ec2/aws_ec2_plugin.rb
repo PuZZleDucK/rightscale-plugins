@@ -11,13 +11,13 @@ plugin "rs_aws_ec2" do
     default_host "ec2.amazonaws.com"
     default_scheme "https"
     query do {
-      "Version" => "2016-11-15" # TODO: check AWS API versioning
+      "Version" => "2016-11-15"
     } end
   end
 
   type "ec2" do
     # HREF is set to the correct template in the provision definition due to a lack of usable fields in the response to build the href
-    href_templates "/?Action=DescribeEc2s&Ec2Id.1={{//CreateEc2Response/ec2/ec2Id}}","/?DescribeEc2s&Ec2Id.1={{//DescribeEc2sResponse/ec2Set/item/ec2Id}}"
+    href_templates "/?Action=DescribeImages&ImageId.1={{//CreateImageResponse/ec2/ImageId}}","/?DescribeImages&ImageId.1={{//DescribeImagesResponse/ImageSet/item/ImageId}}"
     provision 'provision_ec2'
     delete    'delete_ec2'
 
@@ -35,18 +35,6 @@ plugin "rs_aws_ec2" do
 
     field "block_device_mapping_3" do
       alias_for " BlockDeviceMapping.3"
-      type      "string"
-      location  "query"
-    end
-
-    field "block_device_mapping_4" do
-      alias_for " BlockDeviceMapping.4"
-      type      "string"
-      location  "query"
-    end
-
-    field "block_device_mapping_5" do
-      alias_for " BlockDeviceMapping.5"
       type      "string"
       location  "query"
     end
@@ -121,7 +109,7 @@ plugin "rs_aws_ec2" do
     end
 
     action "create_tag" do
-      path "/?Action=CreateTags&ResourceId.1=$ec2Id"
+      path "/?Action=CreateTags&ResourceId.1=$imageId"
       verb "POST"
       field "tag_1_key" do
         alias_for "Tag.1.Key"
@@ -135,7 +123,7 @@ plugin "rs_aws_ec2" do
     end
 
     action "delete_tag" do
-      path "/?Action=CreateTags&ResourceId.1=$ec2Id"
+      path "/?Action=CreateTags&ResourceId.1=$imageId"
       verb "DELETE"
       field "tag_1_key" do
         alias_for "Tag.1.Key"
@@ -146,7 +134,7 @@ plugin "rs_aws_ec2" do
   # https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_RebootInstances.html
   action "reboot" do
     verb "POST"
-    path "/?Action=RebootInstances&InstanceId.1=$InstanceId.1&InstanceId.2=$InstanceId.2"
+    path "/?Action=RebootInstances&InstanceId.1=$instanceId.1&InstanceId.2=$instanceId.2"
     output_path "//RebootCacheClusterResult/CacheCluster"
 
     field "node_id_1" do
@@ -160,107 +148,12 @@ plugin "rs_aws_ec2" do
     end
   end
 
-# TODO: check: ImageSet
-
-    output "imageId" do
-      type "simple_element"
-    end
-
-    output "requestId" do
-      type "simple_element"
-    end
+  output "imageId" do
+    type "simple_element"
   end
 
-  type "endpoint" do # TODO: update endpoints
-    href_templates "/?Action=DescribeEc2Endpoints&Ec2EndpointId.1={{//CreateEc2EndpointResponse/ec2Endpoint/ec2EndpointId}}","/?Action=DescribeEc2Endpoints&Ec2EndpointId.1={{//DescribeEc2EndpointsResponse/ec2EndpointSet/item/ec2EndpointId}}"
-    provision 'provision_endpoint'
-    delete    'delete_endpoint'
-
-    field "ec2_id" do
-      alias_for "Ec2Id"
-      type      "string"
-      location  "query"
-    end
-
-    field "service_name" do
-      alias_for "ServiceName"
-      type      "string"
-      location  "query"
-    end
-
-    field "route_table_id_1" do
-      alias_for "RouteTableId.1"
-      type      "string"
-      location  "query"
-    end
-
-    field "ec2_endpoint_type" do
-      alias_for "Ec2EndpointType"
-      type "string"
-      location "query"
-    end
-
-    field "private_dns_enabled" do
-      alias_for "PrivateDnsEnabled"
-      type "string"
-      location "query"
-    end
-
-    field "security_group_id_1" do
-      alias_for "SecurityGroupId.1"
-      type "string"
-      location "query"
-    end
-
-    output "ec2EndpointId" do
-      type "simple_element"
-    end
-
-    output "ec2Id" do
-      type "simple_element"
-    end
-
-    output "state" do
-      type "simple_element"
-    end
-
-    output "routeTableIdSet" do
-      type "array"
-    end
-
-    output "creationTimestamp" do
-      type "simple_element"
-    end
-
-    output "policyDocument" do
-      type "simple_element"
-    end
-
-    output "serviceName" do
-      type "simple_element"
-    end
-
-    action "create" do
-      verb "POST"
-      path "/?Action=CreateEc2Endpoint"
-      output_path "//CreateEc2EndpointResponse/ec2Endpoint"
-    end
-
-    action "destroy" do
-      verb "POST"
-      path "/?Action=DeleteEc2Endpoints&Ec2EndpointId.1=$ec2EndpointId"
-    end
-
-    action "get" do
-      verb "POST"
-      output_path "//DescribeEc2EndpointsResponse/ec2EndpointSet/item"
-    end
-
-    action "list" do
-      verb "POST"
-      path "/?Action=DescribeEc2Endpoints"
-      output_path "//DescribeEc2EndpointsResponse/ec2EndpointSet/item"
-    end
+  output "requestId" do
+    type "simple_element"
   end
 
   type "tags" do
@@ -326,20 +219,7 @@ plugin "rs_aws_ec2" do
   end
 end
 
- # TODO: other ec2 data types
-
-resource_pool "vpc_pool" do  # TODO: ec2 equivilent... scaling groups
-  plugin $rs_aws_vpc
-  auth "key", type: "aws" do
-    version     4
-    service    'ec2'
-    region     'us-east-1'
-    access_key cred('AWS_ACCESS_KEY_ID')
-    secret_key cred('AWS_SECRET_ACCESS_KEY')
-  end
-end
-
-define provision_ec2(@declaration) return @ec2 do  # TODO: update definitions to ec2
+define provision_ec2(@declaration) return @ec2 do
   sub on_error: stop_debugging() do
     $object = to_object(@declaration)
     $fields = $object["fields"]
