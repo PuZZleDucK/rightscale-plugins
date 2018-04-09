@@ -162,63 +162,11 @@ plugin "rs_aws_ec2" do
 
 # TODO: check: ImageSet
 
-    output "ec2Id" do
-      type "simple_element" # TODO: better types
-    end
-
-    output "instanceId" do
+    output "imageId" do
       type "simple_element"
     end
 
-    output "instanceType" do
-      type "simple_element"
-    end
-
-    output "availabilityZone" do
-      type "simple_element"
-    end
-
-    output "state" do
-      type "simple_element"
-    end
-
-    output "statusCheck" do
-      type "simple_element"
-    end
-
-    output "alarmStatus" do
-      type "simple_element"
-    end
-
-    output "publicDns" do
-      type "simple_element"
-    end
-
-    output "publicIp" do
-      type "simple_element"
-    end
-
-    output "keyName" do
-      type "simple_element"
-    end
-
-    output "monitoring" do
-      type "simple_element"
-    end
-
-    output "launchTime" do
-      type "simple_element"
-    end
-
-    output "securityGroups" do
-      type "simple_element"
-    end
-
-    output "tagSet" do
-      type "simple_element"
-    end
-
-    output "instanceTenancy" do
+    output "requestId" do
       type "simple_element"
     end
   end
